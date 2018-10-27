@@ -1,0 +1,45 @@
+- name: Instalando stack MEAN com Ansible
+  hosts: all
+  become: true
+  become_user: root
+
+  tasks:
+    - name: Baixando rpm de NodeJS
+      shell: "curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -"
+
+    - name: Importando GPG Key de MongoDB
+      shell: "rpm --import https://www.mongodb.org/static/pgp/server-3.6.asc"
+
+    - name: Criando repositorio para MongoDB
+      copy:
+        src: files/mongodb-org-3.6.repo
+        dest: /etc/yum.repos.d/mongodb-org-3.6.repo
+
+    - name: Instalando pacotes
+      yum:
+        name: 
+          - git
+          - mongodb-org
+          - gcc
+          - gcc-c++
+          - make
+          - nodejs
+        state: present
+        update_cache: yes
+
+    - name: Habilitando banco de dados
+      service:
+        name: mongod
+        state: started
+        enabled: yes
+
+    - name: Clonando aplicacao CRUD de repositorio Git
+      git:
+        repo: 'https://github.com/JonatasFYano/Angular5CRUD.git'
+        dest: ./wemoney
+        clone: yes
+
+    - name: Instalando dependencias em package.json
+      npm:
+        path: ./wemoney
+
