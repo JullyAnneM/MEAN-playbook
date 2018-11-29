@@ -16,16 +16,16 @@
         dest: /etc/yum.repos.d/mongodb-org-3.6.repo
 
     - name: Instalando pacotes
-      yum:
+      dnf:
         name: 
           - git
-          - mongodb-org
+          - mongodb
+          - mongodb-server
           - gcc
           - gcc-c++
           - make
           - nodejs
         state: present
-        update_cache: yes
 
     - name: Habilitando banco de dados
       service:
@@ -33,9 +33,20 @@
         state: started
         enabled: yes
 
+    - name: Criando diretorio de trabalho
+      file:
+        path: ./wemoney
+        state: directory
+
     - name: Clonando aplicacao CRUD de repositorio Git
       git:
-        repo: 'https://github.com/JonatasFYano/Angular5CRUD.git'
+        repo: 'https://github.com/JonatasFYano/WeMoney_Server.git'
+        dest: ./wemoney
+        clone: yes
+
+    - name: Clonando aplicacao CRUD de repositorio Git
+      git:
+        repo: 'https://github.com/JonatasFYano/WeMoney_Client.git'
         dest: ./wemoney
         clone: yes
 
