@@ -38,19 +38,34 @@
         path: ./wemoney
         state: directory
 
+    - name: Criando diretorio de trabalho
+      file:
+        path: ./wemoney/client
+        state: directory
+
+    - name: Criando diretorio de trabalho
+      file:
+        path: ./wemoney/server
+        state: directory
+
+
     - name: Clonando aplicacao CRUD de repositorio Git
       git:
         repo: 'https://github.com/JonatasFYano/WeMoney_Server.git'
-        dest: ./wemoney
+        dest: ./wemoney/server
         clone: yes
 
     - name: Clonando aplicacao CRUD de repositorio Git
       git:
         repo: 'https://github.com/JonatasFYano/WeMoney_Client.git'
-        dest: ./wemoney
+        dest: ./wemoney/client
         clone: yes
 
     - name: Instalando dependencias em package.json
       npm:
-        path: ./wemoney
+        path: ./wemoney/client
+
+    - name: Instalando dependencias em package.json
+      npm:
+        path: ./wemoney/server
 
